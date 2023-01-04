@@ -6,14 +6,14 @@ import { getStatusBarHeight, getBottomSpace } from 'react-native-iphone-x-helper
 const statusBarHeight = getStatusBarHeight(true)
 const bottomSpace = getBottomSpace();
 
-console.log(`${Platform.OS}: ${statusBarHeight}, ${bottomSpace}`)
+// console.log(`${Platform.OS}: ${statusBarHeight}, ${bottomSpace}`)
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header />
 
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    
-    justifyContent: 'flex-end',
+    paddingTop: statusBarHeight,
+    // justifyContent: 'flex-end',
   },
 });
