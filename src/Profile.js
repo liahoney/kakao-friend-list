@@ -1,6 +1,5 @@
 import { Image, View, Text } from "react-native";
 import Margin from "./Margin";
-import styled from 'styled-compoenents/native'
 
 export default ({ uri, name, introduction, isMe }) => {
   const size = isMe ? 50 : 40;
