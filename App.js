@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import Header from "./src/Header";
 import {
   getStatusBarHeight,
@@ -28,36 +28,67 @@ export default function App() {
     console.log("you clicked arrow!");
     setIsOpened(!isOpened);
   };
-  return (
-    <View style={styles.container}>
-      <View style={{flex:1 , paddingHorizontal: 15,} }>
-        <Header />
+  const ItemSeparatorComponent = () => <Margin height={13} />;
 
-        <Margin height={10} />
-
-        <Profile
-          uri={myProfile.uri}
-          name={myProfile.name}
-          introduction={myProfile.introduction}
-        />
-        <Margin height={15} />
-        <Division />
-
-        <Margin height={12} />
-        <FriendSection
-          friendProfileLen={friendProfiles.length}
-          onPressArrow={onPressArrow}
-          isOpened={isOpened}
-        />
-
-        <FriendList data={friendProfiles} isOpened={isOpened} />
-      </View>
-
-      <TabBar
-      selectedTabIdx={selectedTabIdx}
-      setSelectedTabIdx={setSelectedTabIdx} />
+  const renderItem = ({ item }) => (
+    <View>
+      <Profile
+        uri={item.uri}
+        name={item.name}
+        introduction={item.introduction}
+        isMe={false}
+      />
     </View>
   );
+
+  const ListHeaderComponent = () => (
+    <View style={{ backgroundColor: "white" }}>
+      <Header />
+
+      <Margin height={10} />
+
+      <Profile
+        uri={myProfile.uri}
+        name={myProfile.name}
+        introduction={myProfile.introduction}
+        isMe={true}
+      />
+      <Margin height={15} />
+      <Division />
+
+      <Margin height={12} />
+      <FriendSection
+        friendProfileLen={friendProfiles.length}
+        onPressArrow={onPressArrow}
+        isOpened={isOpened}
+      />
+      <Margin height={5}/>
+    </View>
+  );
+
+  const ListFooterComponent = () => <Margin height={10} />;
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={isOpened? friendProfiles: []}
+        contentContainerStyle={{paddingHorizontal: 15}}
+        keyExtractor={(_, index) => index}
+        stickyHeaderIndices={[0]}
+        ItemSeparatorComponent={ItemSeparatorComponent}
+        renderItem={renderItem}
+        ListHeaderComponent={ListHeaderComponent}
+        ListFooterComponent={ListFooterComponent}
+        showsVerticalScrollIndicator={false}
+
+      />
+      <TabBar
+        selectedTabIdx={selectedTabIdx}
+        setSelectedTabIdx={setSelectedTabIdx}
+      />
+    </View>
+  );
+ 
 }
 
 const styles = StyleSheet.create({
@@ -65,7 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     paddingTop: statusBarHeight,
-    
+
     // justifyContent: 'flex-end',
   },
 });
